@@ -2,19 +2,18 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import Home from "./pages/home/Home";
 import TodoList from "./pages/todo-list/TodoList";
+import PageNotFound from "./pages/error/page-not-found/PageNotFound";
 import "./App.css";
-import ErrorPage from "./pages/error/Error";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Home />,
-    errorElement: <ErrorPage />,
+    errorElement: <PageNotFound />,
   },
   {
     path: "/todo",
     element: <TodoList />,
-    errorElement: <ErrorPage />,
   },
 ]);
 
