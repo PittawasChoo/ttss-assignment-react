@@ -14,7 +14,8 @@
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "todo-system": "file:.."
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
