@@ -1,34 +1,39 @@
 {
-    "todos": [
-        {
-            "id": "4775813f-7e5e-47df-ac24-7588d89403d1",
-            "description": "todo 1",
-            "dueDate": "2026-01-15T22:00:00+07:00",
-            "isFinished": false
-        },
-        {
-            "id": "80efe3b1-f77d-4538-bc27-1f22785ba7d6",
-            "description": "todo 2",
-            "dueDate": "2026-01-15T22:00:00+07:00",
-            "isFinished": false
-        },
-        {
-            "id": "23e7aaee-a499-4aa8-8c4f-06b199de71ad",
-            "description": "todo 3",
-            "dueDate": "2026-01-15T22:00:00+07:00",
-            "isFinished": false
-        },
-        {
-            "id": "a51ef638-af75-495c-92d4-4f0fe12d84b6",
-            "description": "todo 4",
-            "dueDate": "2026-01-15T22:00:00+07:00",
-            "isFinished": false
-        },
-        {
-            "id": "1ffcb9a3-764a-4427-b00d-68578746f313",
-            "description": "todo 5",
-            "dueDate": "2026-01-15T22:00:00+07:00",
-            "isFinished": false
-        }
-    ]
+  "todos": [
+    {
+      "id": "4775813f-7e5e-47df-ac24-7588d89403d1",
+      "description": "todo 1",
+      "dueDate": "2026-01-15T22:00:00+07:00",
+      "isFinished": false,
+      "position": 1
+    },
+    {
+      "id": "80efe3b1-f77d-4538-bc27-1f22785ba7d6",
+      "description": "todo 2",
+      "dueDate": "2026-01-15T22:00:00+07:00",
+      "isFinished": false,
+      "position": 2
+    },
+    {
+      "id": "23e7aaee-a499-4aa8-8c4f-06b199de71ad",
+      "description": "todo 3",
+      "dueDate": "2026-01-15T22:00:00+07:00",
+      "isFinished": false,
+      "position": 3
+    },
+    {
+      "id": "a51ef638-af75-495c-92d4-4f0fe12d84b6",
+      "description": "todo 4",
+      "dueDate": "2026-01-15T22:00:00+07:00",
+      "isFinished": false,
+      "position": 4
+    },
+    {
+      "id": "1ffcb9a3-764a-4427-b00d-68578746f313",
+      "description": "todo 5",
+      "dueDate": "2026-01-15T22:00:00+07:00",
+      "isFinished": false,
+      "position": 5
+    }
+  ]
 }
