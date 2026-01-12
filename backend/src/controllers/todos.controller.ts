@@ -19,7 +19,6 @@ function normalizePositions(todos: Todo[]) {
 }
 
 function moveByPosition(todos: Todo[], id: string, newPosition: number) {
-    // newPosition is 1-based desired position
     const sorted = [...todos].sort((a, b) => a.position - b.position);
 
     const fromIndex = sorted.findIndex((t) => t.id === id);
@@ -40,7 +39,7 @@ function moveByPosition(todos: Todo[], id: string, newPosition: number) {
     return { ok: true as const };
 }
 
-// ✅ GET /todos
+// GET /todos
 export async function getTodos(_req: Request, res: Response) {
     try {
         await db.read();
@@ -53,7 +52,7 @@ export async function getTodos(_req: Request, res: Response) {
     }
 }
 
-// ✅ POST /todos
+// POST /todos
 export async function createTodo(req: Request, res: Response) {
     try {
         const { description, dueDate, isFinished } = req.body ?? {};
@@ -77,7 +76,7 @@ export async function createTodo(req: Request, res: Response) {
             description: description.trim(),
             dueDate,
             isFinished: typeof isFinished === "boolean" ? isFinished : false,
-            position: maxPos + 1, // ✅ append at bottom
+            position: maxPos + 1,
         };
 
         db.data!.todos.push(todo);
@@ -90,7 +89,7 @@ export async function createTodo(req: Request, res: Response) {
     }
 }
 
-// ✅ PATCH /todos/:id
+// PATCH /todos/:id
 export async function updateTodo(req: Request, res: Response) {
     try {
         const { id } = req.params;
@@ -111,55 +110,49 @@ export async function updateTodo(req: Request, res: Response) {
             return res.status(400).json({ message: "isFinished must be boolean" });
         }
         if (position !== undefined && !isNonNegativeInt(position)) {
-            return res
-                .status(400)
-                .json({ message: "position must be an integer (>= 0). Use 1..n in practice." });
+            return res.status(400).json({
+                message: "position must be an integer (>= 0)",
+            });
         }
 
         await db.read();
 
-        const idx = db.data!.todos.findIndex((t) => t.id === id);
-        if (idx === -1) {
+        const todo = db.data!.todos.find((t) => t.id === id);
+        if (!todo) {
             return res.status(404).json({ message: "Todo not found" });
         }
 
-        // update basic fields
-        const existing = db.data!.todos[idx];
-        const updated: Todo = {
-            id,
-            ...existing,
-            ...(description !== undefined
-                ? { description: description.trim() }
-                : { description: "" }),
-            ...(dueDate !== undefined ? { dueDate } : { dueDate: "" }),
-            ...(isFinished !== undefined ? { isFinished } : { isFinished: false }),
-            ...(position !== undefined ? { position } : { position: 99 }),
-        };
-        db.data!.todos[idx] = updated;
-
-        // update ordering if position provided
-        if (position !== undefined) {
-            const desired = position <= 0 ? 1 : position;
-            const moved = moveByPosition(db.data!.todos, id, desired);
-            if (!moved.ok) {
-                return res.status(404).json({ message: "Todo not found" });
+        if (position === undefined) {
+            if (description !== undefined) {
+                todo.description = description.trim();
             }
-        } else {
-            // keep consistent positions anyway (optional safety)
-            normalizePositions(db.data!.todos);
+            if (dueDate !== undefined) {
+                todo.dueDate = dueDate;
+            }
+            if (isFinished !== undefined) {
+                todo.isFinished = isFinished;
+            }
+
+            await db.write();
+            return res.status(200).json(todo);
+        }
+
+        const desired = position <= 0 ? 1 : position;
+        const moved = moveByPosition(db.data!.todos, id, desired);
+
+        if (!moved.ok) {
+            return res.status(404).json({ message: "Todo not found" });
         }
 
         await db.write();
-
-        const final = db.data!.todos.find((t) => t.id === id)!;
-        return res.status(200).json(final);
+        return res.status(200).json(todo);
     } catch (err) {
         console.error(err);
         return res.status(500).json({ message: "Internal server error" });
     }
 }
 
-// ✅ DELETE /todos/:id
+// DELETE /todos/:id
 export async function deleteTodo(req: Request, res: Response) {
     try {
         const { id } = req.params;
@@ -177,7 +170,7 @@ export async function deleteTodo(req: Request, res: Response) {
             return res.status(404).json({ message: "Todo not found" });
         }
 
-        // ✅ close position gaps after delete
+        // close position gaps after delete
         normalizePositions(db.data!.todos);
 
         await db.write();
