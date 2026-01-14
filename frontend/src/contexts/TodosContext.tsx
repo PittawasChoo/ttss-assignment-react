@@ -109,7 +109,7 @@ export function TodosProvider({ children }: { children: React.ReactNode }) {
             dispatch({ type: "SET_TODOS", todos: replaced });
         } catch (e) {
             dispatch({ type: "SET_TODOS", todos: prev });
-            toast.error(e instanceof Error ? e.message : "Failed to add todo");
+            toast.error(`Failed to add todo${e instanceof Error && `: ${e.message}`}`);
         }
     };
 
@@ -130,7 +130,7 @@ export function TodosProvider({ children }: { children: React.ReactNode }) {
             dispatch({ type: "SET_TODOS", todos: upsertById(prev, updated) });
         } catch (e) {
             dispatch({ type: "SET_TODOS", todos: prev });
-            toast.error(e instanceof Error ? e.message : "Failed to update todo");
+            toast.error(`Failed to update todo${e instanceof Error && `: ${e.message}`}`);
         }
     };
 
@@ -144,7 +144,7 @@ export function TodosProvider({ children }: { children: React.ReactNode }) {
             // no-op; keep optimistic state
         } catch (e) {
             dispatch({ type: "SET_TODOS", todos: prev });
-            toast.error(e instanceof Error ? e.message : "Failed to delete todo");
+            toast.error(`Failed to delete todo${e instanceof Error && `: ${e.message}`}`);
         }
     };
 
@@ -165,7 +165,7 @@ export function TodosProvider({ children }: { children: React.ReactNode }) {
             await todosApi.updateTodo(id, { isFinished: optimistic.isFinished });
         } catch (e) {
             dispatch({ type: "SET_TODOS", todos: prev });
-            toast.error(e instanceof Error ? e.message : "Failed to update todo");
+            toast.error(`Failed to update todo${e instanceof Error && `: ${e.message}`}`);
         }
     };
 
@@ -188,7 +188,7 @@ export function TodosProvider({ children }: { children: React.ReactNode }) {
             await todosApi.updateTodo(movedTodo.id, { position: movedTodo.position });
         } catch (e) {
             dispatch({ type: "SET_TODOS", todos: prev });
-            toast.error("Failed to reorder todos");
+            toast.error(`Failed to reorder todos${e instanceof Error && `: ${e.message}`}`);
         }
     };
 
