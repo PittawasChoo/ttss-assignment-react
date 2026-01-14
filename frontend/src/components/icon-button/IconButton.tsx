@@ -1,3 +1,5 @@
+import { Button } from "./IconButton.styles";
+
 type Props = {
     src: string;
     alt: string;
@@ -8,16 +10,8 @@ type Props = {
 
 export default function IconButton({ src, alt, onClick, width = 20, height = 20 }: Props) {
     return (
-        <button
-            onClick={onClick}
-            style={{
-                border: "none",
-                background: "transparent",
-                padding: 4,
-                cursor: "pointer",
-            }}
-        >
+        <Button onClick={onClick}>
             <img src={src} alt={alt} width={width} height={height} />
-        </button>
+        </Button>
     );
 }

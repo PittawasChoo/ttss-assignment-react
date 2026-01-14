@@ -1,13 +1,25 @@
-import type { Todo } from "../../types/todo";
-import IconButton from "../icon-button/IconButton";
-import editIcon from "../../assets/edit.png";
-import deleteIcon from "../../assets/delete.png";
-import { formatLocalDateTime } from "../../utils/time";
-
-import DragIcon from "assets/drag.png";
-
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+
+import editIcon from "assets/edit.png";
+import deleteIcon from "assets/delete.png";
+import DragIcon from "assets/drag.png";
+
+import type { Todo } from "types/todo";
+
+import { formatLocalDateTime, isOverdue } from "utils/time";
+
+import IconButton from "../icon-button/IconButton";
+
+import {
+    Wrapper,
+    Left,
+    DragHandle,
+    Content,
+    Description,
+    DueDate,
+    Actions,
+} from "./TodoItem.styles";
 
 type Props = {
     todo: Todo;
@@ -28,28 +40,16 @@ export default function TodoItem({ todo, isDragDisabled, onToggle, onDelete, onE
         transition,
     };
 
+    const isOverdueTask = isOverdue(todo.dueDate) && !todo.isFinished;
+
     return (
         <div ref={setNodeRef} style={style} {...attributes}>
-            <div
-                style={{
-                    padding: 12,
-                    border: "1px solid rgba(0,0,0,0.08)",
-                    borderRadius: 12,
-                    display: "flex",
-                    justifyContent: "space-between",
-                    gap: 12,
-                    width: 400,
-                }}
-            >
-                <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
-                    <img
+            <Wrapper>
+                <Left>
+                    <DragHandle
                         src={DragIcon}
-                        width={16}
-                        height={16}
-                        style={{
-                            cursor: isDragDisabled ? "not-allowed" : "grab",
-                            opacity: isDragDisabled ? 0.4 : 1,
-                        }}
+                        alt="Drag"
+                        disabled={isDragDisabled}
                         {...(!isDragDisabled ? listeners : {})}
                     />
 
@@ -59,23 +59,17 @@ export default function TodoItem({ todo, isDragDisabled, onToggle, onDelete, onE
                         onChange={() => onToggle(todo.id)}
                     />
 
-                    <div>
+                    <Content>
                         <div>
-                            <span
-                                style={{
-                                    textDecoration: todo.isFinished ? "line-through" : "none",
-                                }}
-                            >
-                                {todo.description}
-                            </span>
+                            <Description finished={todo.isFinished}>{todo.description}</Description>
                         </div>
-                        <small style={{ opacity: 0.7 }}>
+                        <DueDate overdue={isOverdueTask}>
                             Due: {formatLocalDateTime(todo.dueDate)}
-                        </small>
-                    </div>
-                </div>
+                        </DueDate>
+                    </Content>
+                </Left>
 
-                <div style={{ display: "flex", gap: 6 }}>
+                <Actions>
                     <IconButton
                         src={editIcon}
                         alt="Edit"
@@ -90,8 +84,8 @@ export default function TodoItem({ todo, isDragDisabled, onToggle, onDelete, onE
                         width={16}
                         height={16}
                     />
-                </div>
-            </div>
+                </Actions>
+            </Wrapper>
         </div>
     );
 }

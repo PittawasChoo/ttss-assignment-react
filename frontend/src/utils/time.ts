@@ -23,3 +23,10 @@ export function isoToLocalInput(iso: string) {
 export function localInputToIso(value: string) {
     return new Date(value).toISOString();
 }
+
+export function isOverdue(iso: string): boolean {
+    const due = new Date(iso).getTime();
+    const now = Date.now();
+
+    return due < now;
+}

@@ -5,5 +5,7 @@ export const Shell = styled.div`
 `;
 
 export const Main = styled.main`
-    min-height: 100vh;
+    padding: 16px;
+    maxwidth: 720px;
+    margin: 40px auto 0 auto;
 `;

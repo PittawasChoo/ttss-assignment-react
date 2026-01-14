@@ -10,7 +10,7 @@ import { arrayMove } from "../utils/reorder";
 
 type State = {
     todos: Todo[];
-    loading: boolean; // initial/refresh fetch
+    loading: boolean;
     error: string | null;
 };
 
@@ -81,7 +81,6 @@ export function TodosProvider({ children }: { children: React.ReactNode }) {
 
     useEffect(() => {
         void refresh();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // Add: optimistic insert (no global loading)
@@ -135,7 +134,7 @@ export function TodosProvider({ children }: { children: React.ReactNode }) {
         }
     };
 
-    // Delete: optimistic remove + rollback on error
+    // Delete: optimistic
     const removeTodo = async (id: string) => {
         const prev = state.todos;
         dispatch({ type: "SET_TODOS", todos: prev.filter((t) => t.id !== id) });
@@ -149,7 +148,7 @@ export function TodosProvider({ children }: { children: React.ReactNode }) {
         }
     };
 
-    // Toggle: optimistic flip (NO LOADING) + rollback + toast on error
+    // Toggle: optimistic
     const toggleDone = async (id: string) => {
         const prev = state.todos;
         const current = prev.find((t) => t.id === id);
@@ -181,7 +180,6 @@ export function TodosProvider({ children }: { children: React.ReactNode }) {
             position: i + 1,
         }));
 
-        // ✅ optimistic update
         dispatch({ type: "SET_TODOS", todos: reordered });
 
         try {
